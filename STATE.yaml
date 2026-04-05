@@ -1,0 +1,41 @@
+project: doodly
+config:
+  on_failure: stop_and_report
+
+tasks:
+  - id: D001
+    name: "Brand + research"
+    status: ready
+    depends_on: []
+    model: deep
+    description: |
+      Create structure: content/blog/, brand/, research/
+      Write brand guide, competitor research, keyword research,
+      draft 12 blog titles. All as markdown.
+    verify:
+      - "test -f ~/projects/doodly/brand/brand-guide.md"
+      - "test -f ~/projects/doodly/research/keywords.md"
+
+  - id: D002
+    name: "Write 8 blog posts"
+    status: blocked
+    depends_on: [D001]
+    model: deep
+    description: |
+      8 SEO blog posts in content/blog/. Topics: goldendoodle
+      insurance, breed comparison, health issues, costs,
+      checklist, grooming, supplements, first year.
+    verify:
+      - "ls ~/projects/doodly/content/blog/*.md | wc -l | awk '{if($1>=8) exit 0; else exit 1}'"
+
+  - id: D003
+    name: "Email sequences"
+    status: blocked
+    depends_on: [D002]
+    model: deep
+    description: |
+      5-email welcome sequence in content/email/welcome/.
+      Lead magnet "Doodle Health Guide" (2000 words).
+    verify:
+      - "ls ~/projects/doodly/content/email/welcome/*.md | wc -l | awk '{if($1>=5) exit 0; else exit 1}'"
+      - "test -f ~/projects/doodly/content/lead-magnet.md"
